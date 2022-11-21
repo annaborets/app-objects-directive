@@ -1,0 +1,31 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 50px;
+  background-color: rgb(23, 117, 102);
+  color: white;
+  padding: 20px;
+  letter-spacing: 0.5rem;
+  text-transform: uppercase;
+}
+
+.list {
+  padding: 20px;
+  background-color: rgb(203, 230, 240);
+  border-radius: 20px;
+  font-size: 1.2rem;
+  &__item {
+    margin-bottom: 20px;
+    line-height: 2rem;
+  }
+}

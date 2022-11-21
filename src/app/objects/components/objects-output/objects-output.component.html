@@ -1,0 +1,8 @@
+<h2 class="heading">Directive example</h2>
+<div class="container">
+    <div class="list">
+        <div *objectFor="let item of data" class="list__item">
+            <p>Obj: {{ item.data }}, <br> <b>Nesting: {{ item.level }}. </b></p>
+        </div>
+    </div>
+</div>
