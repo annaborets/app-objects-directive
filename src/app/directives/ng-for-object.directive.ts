@@ -1,22 +1,29 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
-import {
-  ForDirectiveContext,
-  objectOutputItem,
-  objectItem
-} from '../models/oblect-model';
+interface objectItem {
+  [key: string]: objectItem | string | number;
+}
+
+interface objectOutputItem {
+  data: string;
+  level: number;
+}
+
+interface ForDirectiveContext<T> {
+  $implicit: objectOutputItem;
+}
 
 @Directive({
   selector: '[objectFor]'
 })
 export class ForDirective {
-  private dictionary: objectItem = {};
+  private objectItem: objectItem = {};
   private items: objectOutputItem[] = [];
 
-  static ngTemplateContextGuard<Dic>(
+  static ngTemplateContextGuard<objectOutputItem>(
     dir: ForDirective,
     ctx: unknown
-  ): ctx is ForDirectiveContext<Dic> {
+  ): ctx is ForDirectiveContext<objectOutputItem> {
     return true;
   }
 
@@ -25,26 +32,29 @@ export class ForDirective {
     private vcr: ViewContainerRef
   ) {}
 
-  @Input() set objectForOf(dictionary: objectItem) {
-    this.dictionary = dictionary;
-    this.renderItems();
+  @Input() set objectForOf(objectItem: objectItem) {
+    this.objectItem = objectItem;
+    this.onItemsChange();
   }
 
-  private renderItems(): void {
+  private onItemsChange(): void {
     this.vcr.clear();
 
     this.items = [];
 
-    this.iterateObject(this.dictionary);
+    this.iterateObject(this.objectItem);
+    this.renderItems();
+  }
 
-    this.items.map((item) => {
+  private renderItems() {
+    this.items.forEach((item) => {
       this.vcr.createEmbeddedView(this.templateRef, {
         $implicit: item
       });
     });
   }
 
-  private iterateObject = (obj: objectItem, level = 0) => {
+  private iterateObject(obj: objectItem, level = 0) {
     this.items.push({
       data: JSON.stringify(obj),
       level
@@ -61,5 +71,5 @@ export class ForDirective {
         this.iterateObject(value, level + 1);
       }
     });
-  };
+  }
 }
